@@ -22,7 +22,7 @@ ${JAVA9_HOME}/bin/jar --create -f lib/api.jar -C bin/br.com.quartovago.api .
 ${JAVA9_HOME}/bin/jar --create -f lib/booking.jar -C bin/br.com.quartovago.booking .
 ${JAVA9_HOME}/bin/jar --create -f lib/tripadvisor.jar -C bin/br.com.quartovago.tripadvisor .
 
-#${JAVA9_HOME}/bin/jdeps --module-path bin -s lib/booking.jar 
+${JAVA9_HOME}/bin/jdeps --module-path bin -s lib/booking.jar 
 	
 ${JAVA9_HOME}/bin/jlink -p ${JAVA9_HOME}/jmods/:lib --add-modules br.com.quartovago.main --launcher start-app=br.com.quartovago.main --output dist
 
