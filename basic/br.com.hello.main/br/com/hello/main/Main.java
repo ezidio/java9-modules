@@ -1,4 +1,4 @@
-package br.com.quartovago.main;
+package br.com.hello.main;
 
 import java.util.logging.Logger;
 

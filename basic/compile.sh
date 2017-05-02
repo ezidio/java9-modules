@@ -1,9 +1,9 @@
 rm -rf bin
 
-mkdir -p bin/br.com.quartovago.main
+mkdir -p bin/br.com.hello.main
 
-java9c -d bin/br.com.quartovago.main $(find br.com.quartovago.main -name "*.java")
+java9c -d bin/br.com.hello.main $(find br.com.hello.main -name "*.java")
 
-java9 --module-path bin/ -m br.com.quartovago.main/br.com.quartovago.main.Main
+java9 --module-path bin/ -m br.com.hello.main/br.com.hello.main.Main
 
 
