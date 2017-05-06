@@ -1,0 +1,169 @@
+
+
+
+##################################
+
+Novidades do Java 9
+
+Everton Emilio Tavares
+TDC Florianópolis - 2017
+
+##################################
+
+
+
+Java 9:
+http://openjdk.java.net/projects/jdk9/
+
+
+
+==========
+  JShell  
+==========
+
+export JAVA9_HOME='/usr/lib/jvm/jdk-9'
+
+${JAVA9_HOME}/bin/jshell 
+
+
+String hello(String nome) { return "Hello " + nome; }
+
+class Teste { public static String executa() { return "bla"; }}
+
+/types 
+/vars
+
+== Blocos ==
+
+
+StringBuilder sb = new StringBuilder()
+
+for (int i = 0; i < 10; i++)
+sb.append(" bla "+i+",")
+
+for (int i = 0; i < 10; i++) {
+sb.append(" bla "+i+",");
+}
+
+
+== Importando bibliotecas ==
+
+/env -class-path /opt/lib/jshell-example-1.0-SNAPSHOT.jar
+
+import br.com.exemplos.java9.*
+
+NomeGenerator nomeProgramador = new NomeProgramadorGenerator();
+
+nomeProgramador.of(2, 10)
+
+/list #Lista as operações já realizadas
+
+/list -all
+
+/list -start
+
+/save gera-nomes #Salva as configurações	
+
+${JAVA9_HOME}/bin/jshell carrega-nomes #irá gerar um erro
+
+${JAVA9_HOME}/bin/jshell --class-path /opt/lib/jshell-example-1.0-SNAPSHOT.jar carrega-nomes
+
+/reset #Limpa o estado
+
+/open carrega-nomes
+
+/list 
+
+/edit #Edita um comando 
+
+
+===============================
+  Construtores de Collections 
+===============================
+
+List.of(1,2,3,4)
+Set.of(1,2,3,4)
+Map.of("bla", 1, "ble", 2, "bli", 3)
+
+List.of(1,2,3).stream().map(n -> n + 1).collect(Collectors.toList())
+
+
+=================
+  Modularização
+=================
+
+
+== Básico ==
+
+cd ~/dev/projects/tdc2017/java9-modules/basic
+
+rm -rf bin
+
+mkdir -p bin/br.com.hello.main
+
+${JAVA9_HOME}/bin/javac -d bin/br.com.hello.main $(find br.com.hello.main -name "*.java")
+
+${JAVA9_HOME}/bin/java --module-path bin/ -m br.com.hello.main/br.com.hello.main.Main
+
+
+== Dependencias ==
+
+cd ~/dev/projects/tdc2017/java9-modules/dependency
+
+rm -rf bin
+
+mkdir -p bin/br.com.quartovago.api
+mkdir -p bin/br.com.quartovago.main
+
+${JAVA9_HOME}/bin/javac -p bin -d bin/br.com.quartovago.api $(find br.com.quartovago.api -name "*.java")
+${JAVA9_HOME}/bin/javac -p bin -d bin/br.com.quartovago.main $(find br.com.quartovago.main -name "*.java")
+
+${JAVA9_HOME}/bin/java --module-path bin/ -m br.com.quartovago.main/br.com.quartovago.main.Main
+
+
+== Serviços ==
+
+rm -rf bin
+rm -rf lib
+rm -rf dist
+
+mkdir lib
+mkdir -p bin/br.com.quartovago.api
+mkdir -p bin/br.com.quartovago.booking
+mkdir -p bin/br.com.quartovago.tripadvisor
+mkdir -p bin/br.com.quartovago.main
+
+${JAVA9_HOME}/bin/javac -p bin -d bin/br.com.quartovago.api $(find br.com.quartovago.api -name "*.java")
+${JAVA9_HOME}/bin/javac -p bin -d bin/br.com.quartovago.booking $(find br.com.quartovago.booking -name "*.java")
+${JAVA9_HOME}/bin/javac -p bin -d bin/br.com.quartovago.tripadvisor $(find br.com.quartovago.tripadvisor -name "*.java")
+${JAVA9_HOME}/bin/javac -p bin -d bin/br.com.quartovago.main $(find br.com.quartovago.main -name "*.java")
+
+${JAVA9_HOME}/bin/java --module-path bin/ -m br.com.quartovago.main/br.com.quartovago.main.Main
+
+
+== Empacotando ==
+
+${JAVA9_HOME}/bin/jar --create -f lib/main.jar -e br.com.quartovago.main.Main -C bin/br.com.quartovago.main .
+${JAVA9_HOME}/bin/jar --create -f lib/api.jar -C bin/br.com.quartovago.api .
+${JAVA9_HOME}/bin/jar --create -f lib/booking.jar -C bin/br.com.quartovago.booking .
+${JAVA9_HOME}/bin/jar --create -f lib/tripadvisor.jar -C bin/br.com.quartovago.tripadvisor .
+
+
+==  Verificando as dependencias ==
+
+
+${JAVA9_HOME}/bin/jdeps --module-path bin -s lib/booking.jar 
+
+
+== Criando imagens auto executáveis ==
+
+${JAVA9_HOME}/bin/jlink -p ${JAVA9_HOME}/jmods/:lib --add-modules br.com.quartovago.main --launcher start-app=br.com.quartovago.main --output dist
+
+dist/bin/start-app
+
+====================================
+  Inner class Diamond
+====================================
+
+List<String> minhaLista = new ArrayList<>() { public boolean add(String o) { return super.add(o + " teste"); } }
+
