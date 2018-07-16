@@ -1,32 +1,31 @@
-export JAVA9_HOME='/usr/lib/jvm/jdk-9'
+rm -rf target
 
-rm -rf bin
-rm -rf lib
-rm -rf dist
+mkdir -p target/modules
 
-mkdir lib
-mkdir -p bin/br.com.quartovago.api
-mkdir -p bin/br.com.quartovago.booking
-mkdir -p bin/br.com.quartovago.tripadvisor
-mkdir -p bin/br.com.quartovago.main
+mkdir -p target/bin/br.com.quartovago.api
+javac -p target/bin -d target/bin/br.com.quartovago.api $(find src/br.com.quartovago.api -name "*.java")
+jar --create --file=target/modules/api.jar --module-version=1.0 -C target/bin/br.com.quartovago.api .
 
-${JAVA9_HOME}/bin/javac -p bin -d bin/br.com.quartovago.api $(find br.com.quartovago.api -name "*.java")
-${JAVA9_HOME}/bin/javac -p bin -d bin/br.com.quartovago.booking $(find br.com.quartovago.booking -name "*.java")
-${JAVA9_HOME}/bin/javac -p bin -d bin/br.com.quartovago.tripadvisor $(find br.com.quartovago.tripadvisor -name "*.java")
-${JAVA9_HOME}/bin/javac -p bin -d bin/br.com.quartovago.main $(find br.com.quartovago.main -name "*.java")
+mkdir -p target/bin/br.com.quartovago.booking
+javac -p target/bin -d target/bin/br.com.quartovago.booking $(find src/br.com.quartovago.booking -name "*.java")
+jar --create --file=target/modules/booking.jar --module-version=1.0 -C target/bin/br.com.quartovago.booking .
 
-#${JAVA9_HOME}/bin/java --module-path bin/ -m br.com.quartovago.main/br.com.quartovago.main.Main
+mkdir -p target/bin/br.com.quartovago.tripadvisor
+javac -p target/bin -d target/bin/br.com.quartovago.tripadvisor $(find src/br.com.quartovago.tripadvisor -name "*.java")
+jar --create --file=target/modules/tripadvisor.jar --module-version=1.0 -C target/bin/br.com.quartovago.tripadvisor .
 
-${JAVA9_HOME}/bin/jar --create -f lib/main.jar -e br.com.quartovago.main.Main -C bin/br.com.quartovago.main .
-${JAVA9_HOME}/bin/jar --create -f lib/api.jar -C bin/br.com.quartovago.api .
-${JAVA9_HOME}/bin/jar --create -f lib/booking.jar -C bin/br.com.quartovago.booking .
-${JAVA9_HOME}/bin/jar --create -f lib/tripadvisor.jar -C bin/br.com.quartovago.tripadvisor .
+mkdir -p target/bin/br.com.quartovago.main
+javac -p target/bin -d target/bin/br.com.quartovago.main $(find src/br.com.quartovago.main -name "*.java")
+jar --create --file=target/modules/main.jar --module-version=1.0 --main-class br.com.quartovago.main.Main -C target/bin/br.com.quartovago.main .
 
-#${JAVA9_HOME}/bin/jdeps --module-path bin -s lib/booking.jar 
-	
-${JAVA9_HOME}/bin/jlink -p ${JAVA9_HOME}/jmods/:lib --add-modules br.com.quartovago.main --launcher start-app=br.com.quartovago.main --output dist
 
-dist/bin/start-app
+
+rm -rf target/dist
+jlink -p ${JAVA_HOME}/jmods/:target/modules \
+      --add-modules br.com.quartovago.main \
+      --launcher start-app=br.com.quartovago.main \
+      --output target/dist
+
 
 
 

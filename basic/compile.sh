@@ -1,9 +1,16 @@
-rm -rf bin
+#!/bin/bash
+rm -rf target
+mkdir target
+mkdir target/modules
 
-mkdir -p bin/br.com.hello.main
+## Compilando modulo
 
-java9c -d bin/br.com.hello.main $(find br.com.hello.main -name "*.java")
+mkdir -p target/bin/br.com.hello
+javac -d target/bin/br.com.hello $(find src/br.com.hello -name "*.java")
+jar --create --file=target/modules/hello.jar \
+    --module-version=1.0 \
+    --main-class br.com.hello.main.Main \
+    -C target/bin/br.com.hello .
 
-java9 --module-path bin/ -m br.com.hello.main/br.com.hello.main.Main
 
 
