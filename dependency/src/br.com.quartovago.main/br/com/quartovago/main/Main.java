@@ -15,6 +15,6 @@ public class Main {
         for (int i = 0; i < nomes.length; i++) {
             LOG.info(nomes[i]);
         }
-    } 
+    }
 
 }

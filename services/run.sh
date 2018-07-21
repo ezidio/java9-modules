@@ -1,3 +1,3 @@
 #!/bin/bash
 
-target/dist/bin/start-app
+java -p target/modules -m br.com.quartovago.main/br.com.quartovago.main.Main

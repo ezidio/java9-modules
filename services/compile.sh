@@ -1,3 +1,4 @@
+#!/bin/bash
 rm -rf target
 
 mkdir -p target/modules
@@ -18,15 +19,4 @@ mkdir -p target/bin/br.com.quartovago.main
 javac -p target/bin -d target/bin/br.com.quartovago.main $(find src/br.com.quartovago.main -name "*.java")
 jar --create --file=target/modules/main.jar --module-version=1.0 --main-class br.com.quartovago.main.Main -C target/bin/br.com.quartovago.main .
 
-
-
-rm -rf target/dist
-jlink -p ${JAVA_HOME}/jmods/:target/modules \
-      --add-modules br.com.quartovago.main \
-      --launcher start-app=br.com.quartovago.main \
-      --output target/dist
-
-
-
-
-
+echo "Success"
